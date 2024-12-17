@@ -1,0 +1,32 @@
+.chatContainer {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100vh;
+  z-index: 1000;
+  transition: all 0.3s ease;
+  border-radius: 0;
+}
+
+.minimized {
+  top: auto;
+  bottom: 20px;
+  height: 400px;
+  background-color: var(--mantine-color-gray-8);
+  border-radius: var(--mantine-radius-md);
+}
+
+.chatButton {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+}
+
+.chatButton:hover {
+  transform: translateX(-50%) scale(1.05);
+}
