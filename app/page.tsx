@@ -1,17 +1,22 @@
 import { Home } from '@/components/Home/Home';
 import { App } from '@/components/App/App';
-import { Chat } from '@/components/Chat/Chat';
 import { Projects } from '@/components/Projects/Projects';
-import { Skills } from '@/components/Skills/Skills';
+import { Contact } from '@/components/Contact/Contact';
+import { Section } from '@/components/Section';
 
 export default function HomePage() {
   return (
     <>
       <App>
-        <Home/>
-        <Skills/>
-        <Projects/>
-        {/* <Chat/> */}
+        <Section id="home">
+          <Home/>
+        </Section>
+        <Section id="projects">
+          <Projects/>
+        </Section>
+        <Section id="contact">
+          <Contact/>
+        </Section>
       </App>
     </>
   );

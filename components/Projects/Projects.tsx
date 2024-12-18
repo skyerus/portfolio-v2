@@ -23,7 +23,7 @@ function ProjectCardContent({ title, description, technologies, date, liveUrl, i
   };
 
   return (
-    <Stack gap="sm">
+    <Stack id="projects" gap="sm">
       <Title order={3}>
         {title}
         <Text size="xs" c="dimmed">

@@ -41,7 +41,7 @@ export function Skills() {
   ];
 
   return (
-    <Container size="md" py="xl">
+    <Container size="md">
       <Box className={classes.scrollContainer}>
         <Box className={classes.marquee}>
           {skills.map((skill, index) => (

@@ -1,6 +1,9 @@
-.container {
-  min-height: 100vh;
-  padding: 0 2rem;
+.home {
+  min-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 80px;
 }
 
 .title {
@@ -20,4 +23,34 @@
   object-position: 40% 50%;
   width: 140px;
   height: 140px;
+}
+
+.wrapper {
+  min-height: calc(100vh - 40px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  color: var(--mantine-color-gray-0);
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0;
+  padding: 0;
+}
+
+.description {
+  color: var(--mantine-color-gray-0);
+  font-size: 1.25rem;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+.quote {
+  color: var(--mantine-color-gray-4);
+  font-size: 1rem;
+  max-width: 580px;
+  margin: 0 auto;
 }
