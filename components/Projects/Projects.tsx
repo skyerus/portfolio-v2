@@ -105,13 +105,6 @@ export function Projects() {
   return (
     <Container size="md" py="xl">
       <Stack gap="xl">
-        <Title
-          className={classes.title}
-          order={2}
-        >
-          Projects
-        </Title>
-
         <Stack gap="xl">
           <Card shadow="md" radius="md" className={classes.projectCard} p={0}>
             <Box pos="relative">

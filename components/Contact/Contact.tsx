@@ -1,39 +1,70 @@
-import { Text, Title, Stack, Group, Image, Paper, Container } from '@mantine/core';
+'use client'
+
+import { Container, Title, TextInput, Textarea, Button, Paper, Stack } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import classes from './Contact.module.css';
 
-export function Contact() {
-  return (
-    <Container id="contact" pt={100} size="xs" py="xl">
-      <Paper 
-        shadow="md" 
-        radius="lg" 
-        p="xl"
-        bg="inherit"
-        w="fit-content"
-        mx="auto"
-      >
-        <Stack gap="lg" align="center">
-          <Group align="center" gap={40} justify="center">
-            <Image
-              src="/profile.jpg"
-              className={classes.avatar}
-              alt="Skye Gill"
-            />
-            <Title className={classes.title} ta={{ base: 'center', sm: 'left' }}>
-              <Text inherit gradient={{ from: 'blue', to: 'violet' }} variant='gradient' component="span">
-                Skye Gill
-              </Text>
-              <Text className={classes.subtitle} size="xl" fw={400} ta={{ base: 'center', sm: 'left' }}>
-                Software Engineer
-              </Text>
-            </Title>
-          </Group>
+interface ContactFormValues {
+  name: string;
+  email: string;
+  message: string;
+}
 
-          <Text c="gray.0" ta="center" size="lg" maw={580}>
-            Based in London, I craft automated systems in the pursuit of empowering people.
-          </Text>
-        </Stack>
-      </Paper>
+export function Contact() {
+  const form = useForm<ContactFormValues>({
+    initialValues: {
+      name: '',
+      email: '',
+      message: ''
+    },
+    validate: {
+      name: (value) => (value.length < 2 ? 'Name must be at least 2 characters' : null),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      message: (value) => (value.length < 10 ? 'Message must be at least 10 characters' : null),
+    },
+  });
+
+  const handleSubmit = (values: ContactFormValues) => {
+    // TODO: Implement form submission
+    console.log(values);
+  };
+
+  return (
+    <Container size="sm" py="xl">
+        <Paper shadow="md" radius="lg" p="xl" className={classes.form}>
+          <Stack gap="lg">
+            <Title order={2} ta="center" c="gray.0">
+              Get in Touch
+            </Title>
+
+            <form onSubmit={form.onSubmit(handleSubmit)}>
+              <Stack gap="md">
+                <TextInput
+                  label="Name"
+                  placeholder="Your name"
+                  {...form.getInputProps('name')}
+                />
+
+                <TextInput
+                  label="Email"
+                  placeholder="your@email.com"
+                  {...form.getInputProps('email')}
+                />
+
+                <Textarea
+                  label="Message"
+                  placeholder="How can I help you?"
+                  minRows={4}
+                  {...form.getInputProps('message')}
+                />
+
+                <Button type="submit" fullWidth>
+                  Send Message
+                </Button>
+              </Stack>
+            </form>
+          </Stack>
+        </Paper>
     </Container>
   );
 }
