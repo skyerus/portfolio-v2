@@ -1,0 +1,52 @@
+.iconContainer {
+  transition: transform 0.2s ease;
+}
+
+.iconContainer:hover {
+  transform: translateY(-5px);
+}
+
+[data-mantine-color-scheme="dark"] .invertedIcon {
+  filter: invert(1);
+}
+
+.scrollContainer {
+  position: relative;
+  display: flex;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.marquee, .marquee2 {
+  display: flex;
+  white-space: nowrap;
+  padding: 1rem 0;
+}
+
+.marquee2 {
+  position: absolute;
+  top: 0;
+}
+
+.scrollItem {
+  flex-shrink: 0;
+  margin: 0 2rem;
+}
+
+.marquee {
+  animation: marquee 25s linear infinite;
+}
+
+.marquee2 {
+  animation: marquee2 25s linear infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes marquee2 {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(0%); }
+}

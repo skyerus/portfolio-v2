@@ -1,0 +1,9 @@
+.appShell {
+  background-color: var(--mantine-color-dark-8);
+  background-image: 
+    linear-gradient(rgba(82, 145, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(82, 145, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(82, 145, 255, 0.04) .5px, transparent .5px),
+    linear-gradient(90deg, rgba(82, 145, 255, 0.04) .5px, transparent .5px);
+  background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+}

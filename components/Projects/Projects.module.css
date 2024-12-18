@@ -1,0 +1,30 @@
+.title {
+  display: inline-block;
+  border-bottom: 2px solid var(--mantine-color-blue-filled);
+  padding: 2px 0;
+}
+
+.projectCard {
+  position: relative;
+  overflow: visible;
+}
+
+.video {
+  width: 100%;
+  min-height: 100%;
+  border-radius: var(--mantine-radius-md) var(--mantine-radius-md) 0 0;
+}
+
+.projectImage {
+  width: 100%;
+  height: auto;
+  border-radius: var(--mantine-radius-md) var(--mantine-radius-md) 0 0;
+}
+
+.infoCard {
+  position: absolute;
+  bottom: 100px;
+  right: -50px;
+  width: 350px;
+  border-top: 4px solid var(--mantine-color-blue-filled);
+}

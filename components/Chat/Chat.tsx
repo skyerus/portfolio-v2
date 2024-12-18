@@ -6,13 +6,12 @@ import { IconMessageCircle, IconMinimize, IconMaximize, IconX, IconSend } from '
 import classes from './Chat.module.css';
 
 const DEFAULT_QUESTIONS = [
-  'Tell me about yourself?',
-  'What are your technical skills?',
-  'What projects have you worked on?',
-  'Do you have any blog posts?',
+  'Skills',
+  'Projects',
+  'Blog',
 ];
 
-const INTRO_MESSAGE = "Hi! I'm Skye's AI assistant. I can tell you all about Skye's experience, projects, and interests. Feel free to ask me anything or choose from the quick questions below!";
+const INTRO_MESSAGE = "Hi! I'm Skye's AI assistant. I can tell you all about Skye's experience, projects, and interests. Feel free to ask me anything or choose from the suggestions below!";
 
 export function Chat() {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -76,6 +75,7 @@ export function Chat() {
       shadow="md"
       p="md"
       w={containerSize}
+      bg={isMinimized ? 'dark.7' : 'transparent'}
     >
       <Stack gap="xs" h="100%">
         <Container size={containerSize} h="100%" p={0}>
@@ -86,6 +86,7 @@ export function Chat() {
                   variant="subtle"
                   onClick={() => setIsMinimized(!isMinimized)}
                   title={isMinimized ? 'Maximize' : 'Minimize'}
+                  color="gray.0"
                 >
                   {isMinimized ? <IconMaximize size={18} /> : <IconMinimize size={18} />}
                 </ActionIcon>
@@ -93,20 +94,21 @@ export function Chat() {
                   variant="subtle"
                   onClick={() => setIsFullyMinimized(true)}
                   title="Close"
+                  color="gray.0"
                 >
                   <IconX size={18} />
                 </ActionIcon>
               </Group>
 
               <ScrollArea h={isMinimized ? 200 : "calc(100vh - 200px)"}>
-                <Paper p="md" radius="md" withBorder>
-                  <Text>{displayedIntro}</Text>
+                <Paper className={classes.messageContainer} p="md" radius="md">
+                  <Text c="gray.0">{displayedIntro}</Text>
                 </Paper>
               </ScrollArea>
             </Stack>
 
             <Stack gap="xs">
-              <Group gap="xs" wrap="wrap">
+              <Group wrap="nowrap">
                 {DEFAULT_QUESTIONS.map((question, index) => (
                   <Button
                     key={index}
@@ -127,10 +129,11 @@ export function Chat() {
                 onChange={(event) => setUserInput(event.currentTarget.value)}
                 onKeyDown={handleKeyPress}
                 rightSection={
-                  <ActionIcon
+                  <ActionIcon 
                     variant="subtle" 
                     onClick={handleSendMessage}
                     disabled={!userInput.trim()}
+                    color="gray.0"
                   >
                     <IconSend size={16} />
                   </ActionIcon>
