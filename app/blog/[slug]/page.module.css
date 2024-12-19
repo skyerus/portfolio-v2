@@ -2,6 +2,14 @@
   background: inherit;
 }
 
+.headerImage {
+  width: 100%;
+  height: auto;
+  margin-bottom: 2rem;
+  max-height: 400px;
+  object-fit: cover;
+}
+
 .mdx-content {
   color: var(--mantine-color-gray-0);
 }
@@ -28,7 +36,8 @@
   font-family: var(--mantine-font-family-monospace);
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--mantine-color-dark-5);
+  color: var(--mantine-color-gray-0);
 }
 
 .mdx-content pre code {

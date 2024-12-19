@@ -1,0 +1,106 @@
+---
+title: What is Go? Should I use it for my back-end?
+date: 'Sep 14, 2021'
+description: A beginner's guide to Go, a statically typed, compiled programming language.
+headerImage: "blogs/what-is-go/go-cover.avif"
+---
+
+![go logo](blogs/what-is-go/go-background.avif)
+
+Go (commonly, incorrectly, referred to as Golang) is a statically typed, compiled programming language initially released in 2009. It was designed at Google by taking inspiration from the productivity and relative simplicity of Python. It's a general purpose language and has been used to write many intensive/high-demand applications, for example, docker & kubernetes.
+
+One of the applications many consider Go for is a web server, we're going to discuss whether Go is a good candidate for this by examining some of its strengths:
+
+### Simplicity
+
+Consider the following code:
+
+```go
+package main
+
+import (
+    "fmt"
+    "log"
+    "net/http"
+)
+
+func handler(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintf(w, "Welcome, %s", r.URL.Path[1:])
+}
+
+func main() {
+    http.HandleFunc("/", handler)
+    log.Fatal(http.ListenAndServe(":8080", nil))
+}
+```
+
+The `package main` signifies that this package contains an executable `main()` function. This is a special function & is the entry point of the program. Go will automatically call `main()` & every executable program must contain a single main package and `main()` function.
+
+This `main()` makes a call to `http.HandleFunc`, which tells the `http` package to handle all requests to the root `"/"` with the `handler` function.
+
+It then calls `http.ListenAndServe(":8080", nil)`, `:8080` being the port that the server will listen on. The `nil` tells the package to use the default mux `Handler` (don't worry about this for now). This function will now block the program until terminated.
+
+Our `handler` function has a signature (input parameters & return values) that is required by all http handlers.
+
+The first input parameter is of type `http.ResponseWriter`, this (as implied by the name) writes to the response issued by the server. Whenever we write to this we are effectively sending data to the client.
+
+The second input parameter is of type `http.Request`, this is the data structure of the HTTP request received from the client. `r.url.Path[1:]` creates a sub-slice of the request's URL path from the 1st character onwards (it drops the leading `/`).
+
+Run this program (`go run main.go`) and access the following URL:
+
+http://localhost:8080/reader
+
+You should see printed to the screen:
+
+`Welcome, reader`
+
+### Efficiency
+
+When talking about efficiency of a programming language, there are two key things to consider, the rate at which a set of engineers can produce a program & the raw speed of the program itself.
+
+The following graph depicts how Golang is a fine balance of the two (against other languages).
+
+![Benefits of Golang](blogs/what-is-go/benefits-of-go.avif)
+
+### Concurrency
+
+`Go` uses goroutines for its concurrency. Internally, these are lightweight threads managed by the `Go` runtime. We can think of them as concurrent functions that run while the rest of the program continues.
+
+Consider this simple example:
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func doWork() {
+	fmt.Println("work complete")
+}
+
+func main() {
+	go doWork()
+	time.Sleep(1 * time.Second)
+	fmt.Println("main function finished")
+}
+```
+
+`go` is the keyword that fires off a goroutine with the given function `doWork`. In a separate thread this writes to the console. Meanwhile the `main()` function carries on with its execution (albeit blocked due to the `time.Sleep`). The `time.Sleep` call is needed as otherwise the `main()` finishes its execution and all goroutines are cancelled.
+
+There are occasions when one needs to share/mutate data across goroutines. Go employs the primitives known by other languages (mutexes) for handling this but it also has its own unique mechanism: channels. The problem channels aims to solve is data flow, they do this by allowing communication directly between goroutines. I'm not going to go into this now, I'd suggest https://tour.golang.org/concurrency/2 if interested.
+
+A prime example of goroutines being used is Go's http server, a goroutine handles each http request.
+
+## My Thoughts
+
+The first language I used in a professional capacity was `php` so I found myself comparing the two when I picked up `Go` after seeing the traction it was gaining in 2018. Building a web server in `php` there are a myriad of frameworks to choose between, each of them with their own abstractions that conceal underlying functionality.
+
+In contrast, when I began to explore `Go` I instantly fell in love with how honest it was. Frameworks aren't encouraged, the core packages of `Go` give you plenty to work with. Getting to the nitty gritty implementations is only ever a click or two away, not to mention how readable it is.
+
+`Go` quickly became my favourite language to work with and I'd recommend it to anyone looking to expand their toolkit. If you're hoping to get a job using `Go` I'd suggest searching for job openings in your area before committing. While adoption is on the rise, junior `Go` roles were elusive for me (London, UK) but your mileage may vary :)
+
+##  Where to start?
+
+The [Go tour](https://tour.golang.org/) is a great place to start. Once you've got the fundamentals down I'd suggest putting them to practice with a small project of your own. It doesn't have to be anything groundbreaking, just enough to keep you engaged. It's important to see & interact with your results.
