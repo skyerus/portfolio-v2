@@ -1,0 +1,10 @@
+.codeBlockWrapper {
+    position: relative;
+}
+
+.copyButton {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: var(--mantine-color-dark-6);
+}

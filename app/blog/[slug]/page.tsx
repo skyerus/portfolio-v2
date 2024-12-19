@@ -8,6 +8,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypeHighlight from 'rehype-highlight';
 import '@/styles/highlight-js/github-dark.css';
 import classes from './page.module.css';
+import { CodeBlock } from '@/components/CodeBlock/CodeBlock';
 
 function getReadingTime(content: string) {
   const wordsPerMinute = 200;
@@ -17,7 +18,7 @@ function getReadingTime(content: string) {
 }
 
 function getPost(slug: string) {
-  const markdownFile = fs.readFileSync(path.join('blogs', slug + '.mdx'), 'utf-8');
+  const markdownFile = fs.readFileSync(path.join('blogs', `${slug}.mdx`), 'utf-8');
   const { data: frontMatter, content } = matter(markdownFile);
 
   if (frontMatter.headerImage && !frontMatter.headerImage.startsWith('/')) {
@@ -78,6 +79,7 @@ const components = {
     <Title order={6} pt="xl" pb="md" {...props} c="gray.0" />
   ),
   p: (props: any) => <Text size="lg" {...props} c="gray.0" />,
+  pre: CodeBlock,
   img: (props: any) => {
     const src = props.src.startsWith('/') ? props.src : `/${props.src}`;
     return (
