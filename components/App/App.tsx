@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import classes from './App.module.css';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Chat } from '../Chat/Chat';
 
 export function App({ children }: { children: React.ReactNode }) {
   const [activeSection, setActiveSection] = useState(0);
@@ -121,6 +122,7 @@ export function App({ children }: { children: React.ReactNode }) {
 
       <AppShell.Main>
           {children}
+          <Chat/>
       </AppShell.Main>
     </AppShell>
   );

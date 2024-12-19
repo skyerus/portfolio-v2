@@ -34,7 +34,7 @@ export function Home() {
             </Group>
 
             <Text c="gray.0" ta="center" size="lg" maw={580}>
-              Based in London, I craft automated systems in the pursuit of empowering people.
+              Based in London, I craft automated systems to empower people.
             </Text>
           </Stack>
         </Paper>
