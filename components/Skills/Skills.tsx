@@ -1,6 +1,6 @@
 'use client'
 
-import { Stack, Image, Text, Container, Box } from '@mantine/core';
+import { Stack, Image, Text, Box, Container } from '@mantine/core';
 import classes from './Skills.module.css';
 
 interface IconProps {
@@ -41,7 +41,7 @@ export function Skills() {
   ];
 
   return (
-    <Container size="md">
+    <Container maw={{ base: '100%', md: '45%' }}>
       <Box className={classes.scrollContainer}>
         <Box className={classes.marquee}>
           {skills.map((skill, index) => (

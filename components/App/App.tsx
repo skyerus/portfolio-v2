@@ -51,65 +51,76 @@ export function App({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [sections, pathname]);
 
+  const NavButtons = () => (
+    <>
+      <Button
+        variant="subtle"
+        className={pathname === '/' && activeSection === 0 ? classes.activeNav : ''}
+        c="gray.0"
+        size="compact-sm"
+        px="xs"
+        component={Link}
+        href="/"
+      >
+        Home
+      </Button>
+      <Button
+        variant="subtle"
+        className={pathname === '/' && activeSection === 1 ? classes.activeNav : ''}
+        c="gray.0"
+        size="compact-sm"
+        px="xs"
+        component={Link}
+        href="/#projects"
+      >
+        Projects
+      </Button>
+      <Button
+        variant="subtle"
+        className={pathname === '/' && activeSection === 2 ? classes.activeNav : ''}
+        c="gray.0"
+        size="compact-sm"
+        px="xs"
+        component={Link}
+        href="/#contact"
+      >
+        Contact
+      </Button>
+      <Button
+        variant="subtle"
+        component={Link}
+        href="/blog"
+        c="gray.0"
+        size="compact-sm"
+        px="xs"
+        className={pathname.startsWith('/blog') ? classes.activeNav : ''}
+      >
+        Blog
+      </Button>
+    </>
+  );
+
   return (
     <AppShell
       header={{ height: 40 }}
-      padding="md"
       className={classes.appShell}
     >
       <AppShell.Header className={classes.header}>
         <Container size="md" h="100%">
-          <Group justify="flex-end" h="100%" gap="md">
-            <Button
-              variant="subtle"
-              className={pathname === '/' && activeSection === 0 ? classes.activeNav : ''}
-              c="gray.0"
-              size="compact-sm"
-              px="xs"
-              component={Link}
-              href="/"
-            >
-              Home
-            </Button>
-            <Button
-              variant="subtle"
-              className={pathname === '/' && activeSection === 1 ? classes.activeNav : ''}
-              c="gray.0"
-              size="compact-sm"
-              px="xs"
-              component={Link}
-              href="/#projects"
-            >
-              Projects
-            </Button>
-            <Button
-              variant="subtle"
-              className={pathname === '/' && activeSection === 2 ? classes.activeNav : ''}
-              c="gray.0"
-              size="compact-sm"
-              px="xs"
-              component={Link}
-              href="/#contact"
-            >
-              Contact
-            </Button>
-            <Button
-              variant="subtle"
-              component={Link}
-              href="/blog"
-              c="gray.0"
-              size="compact-sm"
-              px="xs"
-              className={pathname.startsWith('/blog') ? classes.activeNav : ''}
-            >
-              Blog
-            </Button>
+          {/* Mobile Navigation */}
+          <Group justify="space-around" h="100%" display={{ base: 'flex', sm: 'none' }}>
+            <NavButtons />
+          </Group>
+
+          {/* Desktop Navigation */}
+          <Group justify="flex-end" h="100%" gap="md" display={{ base: 'none', sm: 'flex' }}>
+            <NavButtons />
           </Group>
         </Container>
       </AppShell.Header>
 
       <AppShell.Main>
-        {children}
+          {children}
       </AppShell.Main>
     </AppShell>
   );
