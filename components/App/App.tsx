@@ -3,21 +3,14 @@
 import { AppShell, Group, Button, Container } from '@mantine/core';
 import { useEffect, useState, useRef } from 'react';
 import classes from './App.module.css';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export function App({ children }: { children: React.ReactNode }) {
   const [activeSection, setActiveSection] = useState(0);
   const sections = ['home', 'projects', 'contact'];
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
-
-  const scrollToSection = (index: number) => {
-    const element = sectionRefs.current[index];
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop,
-        behavior: 'smooth'
-      });
-    }
-  };
+  const pathname = usePathname();
 
   useEffect(() => {
     // Initialize refs
@@ -27,6 +20,9 @@ export function App({ children }: { children: React.ReactNode }) {
     });
 
     const handleScroll = () => {
+      // Only track scroll on home page
+      if (pathname !== '/') return;
+
       let height = 0;
       let currentSection = 0;
 
@@ -53,7 +49,7 @@ export function App({ children }: { children: React.ReactNode }) {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [sections]);
+  }, [sections, pathname]);
 
   return (
     <AppShell
@@ -66,41 +62,45 @@ export function App({ children }: { children: React.ReactNode }) {
           <Group justify="flex-end" h="100%" gap="md">
             <Button
               variant="subtle"
-              className={activeSection === 0 ? classes.activeNav : ''}
-              onClick={() => scrollToSection(0)}
+              className={pathname === '/' && activeSection === 0 ? classes.activeNav : ''}
               c="gray.0"
               size="compact-sm"
               px="xs"
+              component={Link}
+              href="/"
             >
               Home
             </Button>
             <Button
               variant="subtle"
-              className={activeSection === 1 ? classes.activeNav : ''}
-              onClick={() => scrollToSection(1)}
+              className={pathname === '/' && activeSection === 1 ? classes.activeNav : ''}
               c="gray.0"
               size="compact-sm"
               px="xs"
+              component={Link}
+              href="/#projects"
             >
               Projects
             </Button>
             <Button
               variant="subtle"
-              className={activeSection === 2 ? classes.activeNav : ''}
-              onClick={() => scrollToSection(2)}
+              className={pathname === '/' && activeSection === 2 ? classes.activeNav : ''}
               c="gray.0"
               size="compact-sm"
               px="xs"
+              component={Link}
+              href="/#contact"
             >
               Contact
             </Button>
             <Button
               variant="subtle"
-              component="a"
+              component={Link}
               href="/blog"
               c="gray.0"
               size="compact-sm"
               px="xs"
+              className={pathname.startsWith('/blog') ? classes.activeNav : ''}
             >
               Blog
             </Button>
