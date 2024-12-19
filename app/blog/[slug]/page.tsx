@@ -127,7 +127,7 @@ export default async function BlogPost({
           <Title c="gray.0" mb="xs" size={40} ta="center">
             {props.frontMatter.title}
           </Title>
-          <Group justify="center" gap="xs" mb="xl">
+          <Group justify="center" gap="xs" mb="xl" mt="xs">
             <Text c="dimmed">
               {props.frontMatter.date}
             </Text>

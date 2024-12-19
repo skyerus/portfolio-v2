@@ -7,6 +7,8 @@
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   transition: transform 0.2s ease;
+  overflow: hidden;
+  border: 1px solid var(--mantine-color-dark-4);
 }
 
 .blogCard:hover {
