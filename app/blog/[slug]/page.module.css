@@ -1,0 +1,66 @@
+.container {
+  background: inherit;
+}
+
+.mdx-content {
+  color: var(--mantine-color-gray-0);
+}
+
+.mdx-content ul,
+.mdx-content ol {
+  margin: 1rem 0;
+  padding-left: 2rem;
+  color: var(--mantine-color-gray-0);
+}
+
+.mdx-content li {
+  margin: 0.5rem 0;
+}
+
+.mdx-content pre {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+.mdx-content code {
+  font-family: var(--mantine-font-family-monospace);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.mdx-content pre code {
+  padding: 0;
+  background: none;
+}
+
+.mdx-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.mdx-content a {
+  color: var(--mantine-color-blue-4);
+  text-decoration: none;
+}
+
+.mdx-content a:hover {
+  text-decoration: underline;
+}
+
+.mdx-content blockquote {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  border-left: 4px solid var(--mantine-color-blue-4);
+  color: var(--mantine-color-gray-2);
+}
+
+.mdx-content hr {
+  margin: 2rem 0;
+  border: none;
+  border-top: 1px solid var(--mantine-color-dark-4);
+} 

@@ -1,0 +1,14 @@
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.blogCard {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease;
+}
+
+.blogCard:hover {
+  transform: translateY(-2px);
+}
