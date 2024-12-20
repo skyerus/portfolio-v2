@@ -134,7 +134,10 @@ const ChatContent = memo(({
             variant="subtle"
             onClick={() => setEmailModalOpened(true)}
             title="Ask Skye directly"
-            color="blue"
+            style={{
+              background: 'linear-gradient(45deg, var(--mantine-color-blue-6) 0%, var(--mantine-color-violet-6) 100%)',
+              color: 'white'
+            }}
             size="sm"
           >
             <IconMessageCircle size={16} />
