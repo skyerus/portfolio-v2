@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback, memo } from 'react';
-import { Paper, Text, Stack, Group, ActionIcon, ScrollArea, TextInput, Modal, Loader } from '@mantine/core';
+import { Paper, Text, Stack, Group, ActionIcon, ScrollArea, TextInput, Modal, Loader, Button } from '@mantine/core';
 import { IconMessageCircle, IconX, IconSend } from '@tabler/icons-react';
 import { useMediaQuery } from '@mantine/hooks';
 import classes from './Chat.module.css';
@@ -28,6 +28,9 @@ interface ChatContentProps {
   onMinimize: () => void;
   onSendMessage: () => void;
   onInputChange: (value: string) => void;
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setStreamingMessage: React.Dispatch<React.SetStateAction<Message | null>>;
 }
 
 const ChatContent = memo(({
@@ -42,7 +45,13 @@ const ChatContent = memo(({
   onMinimize,
   onSendMessage,
   onInputChange,
+  setMessages,
+  setIsLoading,
+  setStreamingMessage,
 }: ChatContentProps) => {
+  const [emailModalOpened, setEmailModalOpened] = useState(false);
+  const [email, setEmail] = useState('');
+
   const handleKeyPress = useCallback((event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
@@ -51,24 +60,98 @@ const ChatContent = memo(({
   }, [onSendMessage]);
 
   const ChatInput = (
-    <TextInput
-      ref={inputRef}
-      placeholder="Ask me anything..."
-      value={userInput}
-      onChange={(e) => onInputChange(e.currentTarget.value)}
-      onKeyDown={handleKeyPress}
-      disabled={isLoading || !!streamingMessage}
-      rightSection={
-        <ActionIcon 
-          variant="subtle" 
-          onClick={onSendMessage}
-          disabled={!userInput.trim() || isLoading || !!streamingMessage}
-          color="gray.0"
-        >
-          <IconSend size={16} />
-        </ActionIcon>
-      }
-    />
+    <>
+      <Modal
+        opened={emailModalOpened}
+        onClose={() => setEmailModalOpened(false)}
+        title="Enter your email"
+        size="sm"
+      >
+        <form onSubmit={async (e) => {
+          e.preventDefault();
+          const messageContent = `Ask Skye - ${email}`;
+          const userMessage: Message = {
+            content: messageContent,
+            role: 'user',
+            created_at: new Date().toISOString()
+          };
+          setMessages(prev => [...prev, userMessage]);
+          setEmailModalOpened(false);
+          setEmail('');
+          
+          setIsLoading(true);
+          try {
+            const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
+            const response = await fetch(`${baseUrl}/api/v1/chat_message`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include',
+              body: JSON.stringify({ content: messageContent }),
+            });
+
+            if (!response.ok) {
+              throw new Error('Failed to send message');
+            }
+
+            const data = await response.json();
+            setStreamingMessage(data);
+          } catch (error) {
+            console.error('Error sending message:', error);
+          } finally {
+            setIsLoading(false);
+          }
+        }}>
+          <Stack>
+            <TextInput
+              placeholder="Your email"
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
+              type="email"
+              required
+            />
+            <Text size="xs" c="dimmed">
+              By submitting, you agree to share your chat transcript with Skye. He will review and respond via email.
+            </Text>
+            <Button 
+              type="submit"
+            >
+              Submit
+            </Button>
+          </Stack>
+        </form>
+      </Modal>
+      <TextInput
+        ref={inputRef}
+        placeholder="Ask me anything..."
+        value={userInput}
+        onChange={(e) => onInputChange(e.currentTarget.value)}
+        onKeyDown={handleKeyPress}
+        disabled={isLoading || !!streamingMessage}
+        leftSection={
+          <ActionIcon
+            variant="subtle"
+            onClick={() => setEmailModalOpened(true)}
+            title="Ask Skye directly"
+            color="blue"
+            size="sm"
+          >
+            <IconMessageCircle size={16} />
+          </ActionIcon>
+        }
+        rightSection={
+          <ActionIcon 
+            variant="subtle" 
+            onClick={onSendMessage}
+            disabled={!userInput.trim() || isLoading || !!streamingMessage}
+            color="gray.0"
+          >
+            <IconSend size={16} />
+          </ActionIcon>
+        }
+      />
+    </>
   );
 
   return (
@@ -327,6 +410,9 @@ export function Chat() {
     onMinimize: () => setIsMinimized(true),
     onSendMessage: handleSendMessage,
     onInputChange: handleInputChange,
+    setMessages,
+    setIsLoading,
+    setStreamingMessage,
   };
 
   if (isMobile) {
