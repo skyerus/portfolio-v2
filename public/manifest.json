@@ -1,15 +1,24 @@
 {
-  "short_name": "skyegill",
-  "name": "Skye Gill's portfolio",
+  "name": "Skye Gill | Software Engineer",
+  "short_name": "Skye Gill",
+  "description": "London based software engineer specializing in web development, AI, and cloud technologies.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1A1B1E",
+  "theme_color": "#1A1B1E",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "software-engineer.svg",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "180x180",
+      "purpose": "any"
     }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#00e0ca",
-  "background_color": "#1e2124"
+  ]
 }
