@@ -216,7 +216,7 @@ const ChatContent = memo(({
         style={{ 
           flex: 1, 
           overflow: 'auto',
-          marginBottom: isMobile ? 'calc(env(safe-area-inset-bottom) + 80px)' : 0,
+          marginBottom: isMobile ? 'calc(env(safe-area-inset-bottom))' : 0,
         }}
         ref={scrollAreaRef}
         styles={{
@@ -446,7 +446,9 @@ export function Chat() {
         console.error('Error sending message:', error);
       } finally {
         setIsLoading(false);
-        inputRef.current?.focus();
+        requestAnimationFrame(() => {
+          inputRef.current?.focus();
+        });
       }
     }
   }, [userInput]);

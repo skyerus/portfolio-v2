@@ -6,11 +6,13 @@
     linear-gradient(rgba(82, 145, 255, 0.04) .5px, transparent .5px),
     linear-gradient(90deg, rgba(82, 145, 255, 0.04) .5px, transparent .5px);
   background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+  padding-bottom: 40px;
 }
 
 .header {
   background: transparent;
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-bottom: none;
   padding: 0.25rem 0;
 }

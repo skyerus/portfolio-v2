@@ -6,7 +6,7 @@ import { SocialIcons } from './SocialIcons';
 export function Home() {
   return (
     <div className={classes.home}>
-      <Container size="xs" py="xl">
+      <Container size="xs" py="xl" pb={{ base: 'md', sm: 0 }}>
         <Paper 
           shadow="md" 
           radius="lg" 
