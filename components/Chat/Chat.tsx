@@ -218,10 +218,10 @@ const ChatContent = memo(({
       </ActionIcon>
 
       <ScrollArea 
+        className={classes.scrollArea}
         style={{ 
           flex: 1, 
           overflow: 'auto',
-          marginBottom: isMobile ? 'calc(env(safe-area-inset-bottom))' : 0,
         }}
         ref={scrollAreaRef}
         styles={{
@@ -280,17 +280,7 @@ const ChatContent = memo(({
       </ScrollArea>
 
       <Paper
-        style={{
-          padding: '10px',
-          background: 'var(--mantine-color-dark-7)',
-          position: isMobile ? 'fixed' : 'sticky',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          paddingBottom: isMobile ? 'calc(env(safe-area-inset-bottom) + 10px)' : '10px',
-          width: '100%',
-          zIndex: 999,
-        }}
+        className={classes.inputContainer}
       >
         {ChatInput}
       </Paper>
@@ -344,20 +334,7 @@ export function Chat() {
   useEffect(() => {
     const initialVh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${initialVh}px`);
-
-    const handleViewportResize = () => {
-      if (isInputFocused && window.visualViewport) {
-        const vh = window.visualViewport.height * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-      }
-    };
-
-    window.visualViewport?.addEventListener('resize', handleViewportResize);
-    
-    return () => {
-      window.visualViewport?.removeEventListener('resize', handleViewportResize);
-    };
-  }, [isInputFocused]);
+  }, []);
 
   useEffect(() => {
     if (!isMinimized) {
@@ -533,7 +510,6 @@ export function Chat() {
           },
           content: {
             minHeight: '100vh',
-            height: 'calc(var(--vh, 1vh) * 100)',
             display: 'flex',
             flexDirection: 'column',
             background: 'var(--mantine-color-dark-7)',
@@ -543,7 +519,6 @@ export function Chat() {
             padding: 0,
             display: 'flex',
             flexDirection: 'column',
-            height: '100%',
             position: 'relative',
             overflow: 'hidden',
           },
