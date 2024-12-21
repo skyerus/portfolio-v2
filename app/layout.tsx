@@ -56,7 +56,7 @@ export default function RootLayout({ children }: { children: any }) {
         <link rel="manifest" href="/manifest.json" />
       </head>
       <body>
-        <MantineProvider theme={theme}>
+        <MantineProvider defaultColorScheme="dark" theme={theme}>
           <Notifications zIndex={1000} />
           {children}
         </MantineProvider>

@@ -178,11 +178,11 @@ const ChatContent = memo(({
       </ActionIcon>
 
       <ScrollArea 
-        h={isMobile ? "calc(100vh - 80px)" : "calc(400px - 60px)"}
+        h={isMobile ? "calc(var(--vh, 1vh) * 100 - 80px)" : "calc(400px - 60px)"}
         ref={scrollAreaRef}
         pt={0}
       >
-        <Stack gap="xs">
+        <Stack gap="xs" p={{ base: 'xs', sm: 'md' }}>
           {messages.map((message, index) => (
             <Paper 
               key={index} 
@@ -232,6 +232,9 @@ const ChatContent = memo(({
           padding: '10px',
           background: 'var(--mantine-color-dark-7)',
           marginTop: 'auto',
+          position: isMobile ? 'sticky' : 'relative',
+          bottom: 0,
+          width: '100%',
         }}
       >
         {ChatInput}
@@ -280,6 +283,22 @@ export function Chat() {
     };
 
     fetchMessages();
+  }, []);
+
+  useEffect(() => {
+    const setVH = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', setVH);
+
+    return () => {
+      window.removeEventListener('resize', setVH);
+      window.removeEventListener('orientationchange', setVH);
+    };
   }, []);
 
   useEffect(() => {
@@ -429,6 +448,29 @@ export function Chat() {
         fullScreen
         transitionProps={{ transition: 'slide-up' }}
         withCloseButton={false}
+        styles={{
+          inner: {
+            padding: 0,
+          },
+          content: {
+            height: '100vh',
+            maxHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
+            background: 'var(--mantine-color-dark-7)',
+          },
+          body: {
+            height: '100%',
+            padding: 0,
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+          },
+          root: {
+            overflow: 'hidden',
+          }
+        }}
       >
         <ChatContent {...chatContentProps} />
       </Modal>
