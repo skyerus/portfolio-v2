@@ -181,7 +181,7 @@ const ChatContent = memo(({
         style={{ 
           flex: 1, 
           overflow: 'auto',
-          marginBottom: isMobile ? '60px' : 0  // Add margin only on mobile
+          marginBottom: isMobile ? '100px' : 0  // Increased margin for mobile
         }}
         ref={scrollAreaRef}
       >
@@ -235,7 +235,7 @@ const ChatContent = memo(({
           padding: '10px',
           background: 'var(--mantine-color-dark-7)',
           position: isMobile ? 'fixed' : 'relative',
-          bottom: isMobile ? 0 : 'auto',
+          bottom: isMobile ? '20px' : 'auto', // Add some bottom spacing on mobile
           left: isMobile ? 0 : 'auto',
           right: isMobile ? 0 : 'auto',
           width: '100%',
@@ -463,6 +463,7 @@ export function Chat() {
             display: 'flex',
             flexDirection: 'column',
             background: 'var(--mantine-color-dark-7)',
+            paddingBottom: '80px',
           },
           body: {
             flex: 1,
@@ -470,6 +471,8 @@ export function Chat() {
             display: 'flex',
             flexDirection: 'column',
             height: '100%',
+            position: 'relative',
+            overflow: 'hidden',
           },
         }}
       >

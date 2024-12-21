@@ -54,6 +54,7 @@ export default function RootLayout({ children }: { children: any }) {
         />
         <meta name="theme-color" content="#1A1B1E" />
         <link rel="manifest" href="/manifest.json" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>
       <body>
         <MantineProvider defaultColorScheme="dark" theme={theme}>
