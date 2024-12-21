@@ -59,6 +59,15 @@ const ChatContent = memo(({
     }
   }, [onSendMessage]);
 
+  const handleInputFocus = useCallback(() => {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('.mantine-ScrollArea-viewport');
+      if (viewport) {
+        viewport.scrollTop = viewport.scrollHeight;
+      }
+    }
+  }, []);
+
   const ChatInput = (
     <>
       <Modal
@@ -131,7 +140,13 @@ const ChatContent = memo(({
         value={userInput}
         onChange={(e) => onInputChange(e.currentTarget.value)}
         onKeyDown={handleKeyPress}
+        onFocus={handleInputFocus}
         disabled={isLoading || !!streamingMessage}
+        styles={{
+          input: {
+            fontSize: isMobile ? '16px' : undefined,
+          }
+        }}
         leftSection={
           <ActionIcon
             variant="subtle"
@@ -161,7 +176,13 @@ const ChatContent = memo(({
   );
 
   return (
-    <Stack gap={0} h="100%" style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <Stack gap={0} h="100%" style={{ 
+      position: 'relative', 
+      display: 'flex', 
+      flexDirection: 'column',
+      height: '100%',
+      maxHeight: 'calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))'
+    }}>
       <ActionIcon
         variant="subtle"
         onClick={onMinimize}
@@ -181,7 +202,7 @@ const ChatContent = memo(({
         style={{ 
           flex: 1, 
           overflow: 'auto',
-          marginBottom: isMobile ? '100px' : 0  // Increased margin for mobile
+          marginBottom: isMobile ? 'calc(env(safe-area-inset-bottom) + 80px)' : 0
         }}
         ref={scrollAreaRef}
       >
@@ -234,12 +255,13 @@ const ChatContent = memo(({
         style={{
           padding: '10px',
           background: 'var(--mantine-color-dark-7)',
-          position: isMobile ? 'fixed' : 'relative',
-          bottom: isMobile ? '20px' : 'auto', // Add some bottom spacing on mobile
-          left: isMobile ? 0 : 'auto',
-          right: isMobile ? 0 : 'auto',
+          position: isMobile ? 'fixed' : 'sticky',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          paddingBottom: isMobile ? 'calc(env(safe-area-inset-bottom) + 10px)' : '10px',
           width: '100%',
-          zIndex: isMobile ? 1000 : 1,
+          zIndex: 999,
         }}
       >
         {ChatInput}
@@ -458,12 +480,12 @@ export function Chat() {
             padding: 0,
           },
           content: {
-            minHeight: '100vh',
-            height: '100vh',
+            minHeight: '100%',
+            height: '100%',
             display: 'flex',
             flexDirection: 'column',
             background: 'var(--mantine-color-dark-7)',
-            paddingBottom: '80px',
+            paddingBottom: 'calc(env(safe-area-inset-bottom) + 60px)',
           },
           body: {
             flex: 1,

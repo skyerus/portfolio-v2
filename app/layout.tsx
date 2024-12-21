@@ -50,11 +50,10 @@ export default function RootLayout({ children }: { children: any }) {
         <link rel="apple-touch-icon" href="/favicon.svg" />
         <meta
           name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width, user-scalable=no"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
         />
         <meta name="theme-color" content="#1A1B1E" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>
       <body>
         <MantineProvider defaultColorScheme="dark" theme={theme}>
