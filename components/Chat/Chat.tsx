@@ -161,7 +161,7 @@ const ChatContent = memo(({
   );
 
   return (
-    <Stack gap={0} h="100%" style={{ position: 'relative' }}>
+    <Stack gap={0} h="100%" style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100vh' }}>
       <ActionIcon
         variant="subtle"
         onClick={onMinimize}
@@ -169,8 +169,8 @@ const ChatContent = memo(({
         color="gray.0"
         style={{
           position: 'absolute',
-          top: 0,
-          right: 0,
+          top: 10,
+          right: 10,
           zIndex: 10,
         }}
       >
@@ -178,9 +178,12 @@ const ChatContent = memo(({
       </ActionIcon>
 
       <ScrollArea 
-        h={isMobile ? "calc(var(--vh, 1vh) * 100 - 80px)" : "calc(400px - 60px)"}
+        style={{ 
+          flex: 1, 
+          overflow: 'auto',
+          marginBottom: isMobile ? '60px' : 0  // Add margin only on mobile
+        }}
         ref={scrollAreaRef}
-        pt={0}
       >
         <Stack gap="xs" p={{ base: 'xs', sm: 'md' }}>
           {messages.map((message, index) => (
@@ -231,10 +234,12 @@ const ChatContent = memo(({
         style={{
           padding: '10px',
           background: 'var(--mantine-color-dark-7)',
-          marginTop: 'auto',
-          position: isMobile ? 'sticky' : 'relative',
-          bottom: 0,
+          position: isMobile ? 'fixed' : 'relative',
+          bottom: isMobile ? 0 : 'auto',
+          left: isMobile ? 0 : 'auto',
+          right: isMobile ? 0 : 'auto',
           width: '100%',
+          zIndex: isMobile ? 1000 : 1,
         }}
       >
         {ChatInput}
@@ -453,23 +458,19 @@ export function Chat() {
             padding: 0,
           },
           content: {
+            minHeight: '100vh',
             height: '100vh',
-            maxHeight: '100vh',
             display: 'flex',
             flexDirection: 'column',
-            overflow: 'hidden',
             background: 'var(--mantine-color-dark-7)',
           },
           body: {
-            height: '100%',
+            flex: 1,
             padding: 0,
-            overflow: 'hidden',
             display: 'flex',
             flexDirection: 'column',
+            height: '100%',
           },
-          root: {
-            overflow: 'hidden',
-          }
         }}
       >
         <ChatContent {...chatContentProps} />
