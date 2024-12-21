@@ -28,6 +28,7 @@ interface ChatContentProps {
   onMinimize: () => void;
   onSendMessage: () => void;
   onInputChange: (value: string) => void;
+  onInputBlur: () => void;
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setStreamingMessage: React.Dispatch<React.SetStateAction<Message | null>>;
@@ -45,6 +46,7 @@ const ChatContent = memo(({
   onMinimize,
   onSendMessage,
   onInputChange,
+  onInputBlur,
   setMessages,
   setIsLoading,
   setStreamingMessage,
@@ -157,6 +159,7 @@ const ChatContent = memo(({
         onChange={(e) => onInputChange(e.currentTarget.value)}
         onKeyDown={handleKeyPress}
         onFocus={handleInputFocus}
+        onBlur={onInputBlur}
         disabled={isLoading || !!streamingMessage}
         styles={{
           input: {
@@ -313,6 +316,7 @@ export function Chat() {
   const inputRef = useRef<HTMLInputElement>(null);
   const streamingTimeoutRef = useRef<NodeJS.Timeout>();
   const isMobile = useMediaQuery('(max-width: 48em)');
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -338,27 +342,22 @@ export function Chat() {
   }, []);
 
   useEffect(() => {
+    const initialVh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${initialVh}px`);
+
     const handleViewportResize = () => {
-      if (window.visualViewport) {
+      if (isInputFocused && window.visualViewport) {
         const vh = window.visualViewport.height * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-      } else {
-        const vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
       }
     };
 
     window.visualViewport?.addEventListener('resize', handleViewportResize);
-    window.addEventListener('resize', handleViewportResize);
-    window.addEventListener('orientationchange', handleViewportResize);
-    handleViewportResize();
-
+    
     return () => {
       window.visualViewport?.removeEventListener('resize', handleViewportResize);
-      window.removeEventListener('resize', handleViewportResize);
-      window.removeEventListener('orientationchange', handleViewportResize);
     };
-  }, []);
+  }, [isInputFocused]);
 
   useEffect(() => {
     if (!isMinimized) {
@@ -466,6 +465,24 @@ export function Chat() {
     setUserInput(value);
   }, []);
 
+  const handleInputFocus = useCallback(() => {
+    setIsInputFocused(true);
+    setTimeout(() => {
+      if (scrollAreaRef.current) {
+        const viewport = scrollAreaRef.current.querySelector('.mantine-ScrollArea-viewport');
+        if (viewport) {
+          viewport.scrollTop = viewport.scrollHeight;
+        }
+      }
+    }, 200);
+  }, []);
+
+  const handleInputBlur = useCallback(() => {
+    setIsInputFocused(false);
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }, []);
+
   if (isMinimized) {
     return (
       <Group 
@@ -496,6 +513,7 @@ export function Chat() {
     onMinimize: () => setIsMinimized(true),
     onSendMessage: handleSendMessage,
     onInputChange: handleInputChange,
+    onInputBlur: handleInputBlur,
     setMessages,
     setIsLoading,
     setStreamingMessage,
@@ -514,7 +532,7 @@ export function Chat() {
             padding: 0,
           },
           content: {
-            minHeight: 'calc(var(--vh, 1vh) * 100)',
+            minHeight: '100vh',
             height: 'calc(var(--vh, 1vh) * 100)',
             display: 'flex',
             flexDirection: 'column',
