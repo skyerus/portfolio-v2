@@ -87,7 +87,7 @@ export function Contact() {
 
               <Button 
                 type="submit" 
-                loading={form.isSubmitting}
+                loading={form.submitting}
                 style={{
                   background: 'linear-gradient(45deg, var(--mantine-color-blue-6) 0%, var(--mantine-color-violet-6) 100%)'
                 }}

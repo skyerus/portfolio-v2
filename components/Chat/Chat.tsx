@@ -64,7 +64,7 @@ const ChatContent = memo(({
       <Modal
         opened={emailModalOpened}
         onClose={() => setEmailModalOpened(false)}
-        title="Enter your email"
+        title="Notify Skye"
         size="sm"
       >
         <form onSubmit={async (e) => {
