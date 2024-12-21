@@ -28,7 +28,6 @@ interface ChatContentProps {
   onMinimize: () => void;
   onSendMessage: () => void;
   onInputChange: (value: string) => void;
-  onInputBlur: () => void;
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setStreamingMessage: React.Dispatch<React.SetStateAction<Message | null>>;
@@ -46,7 +45,6 @@ const ChatContent = memo(({
   onMinimize,
   onSendMessage,
   onInputChange,
-  onInputBlur,
   setMessages,
   setIsLoading,
   setStreamingMessage,
@@ -62,14 +60,12 @@ const ChatContent = memo(({
   }, [onSendMessage]);
 
   const handleInputFocus = useCallback(() => {
-    setTimeout(() => {
-      if (scrollAreaRef.current) {
-        const viewport = scrollAreaRef.current.querySelector('.mantine-ScrollArea-viewport');
-        if (viewport) {
-          viewport.scrollTop = viewport.scrollHeight;
-        }
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('.mantine-ScrollArea-viewport');
+      if (viewport) {
+        viewport.scrollTop = viewport.scrollHeight;
       }
-    }, 200);
+    }
   }, []);
 
   const scrollToBottom = useCallback(() => {
@@ -159,7 +155,6 @@ const ChatContent = memo(({
         onChange={(e) => onInputChange(e.currentTarget.value)}
         onKeyDown={handleKeyPress}
         onFocus={handleInputFocus}
-        onBlur={onInputBlur}
         disabled={isLoading || !!streamingMessage}
         styles={{
           input: {
@@ -218,10 +213,10 @@ const ChatContent = memo(({
       </ActionIcon>
 
       <ScrollArea 
-        className={classes.scrollArea}
         style={{ 
           flex: 1, 
           overflow: 'auto',
+          marginBottom: isMobile ? 'calc(env(safe-area-inset-bottom))' : 0,
         }}
         ref={scrollAreaRef}
         styles={{
@@ -280,7 +275,17 @@ const ChatContent = memo(({
       </ScrollArea>
 
       <Paper
-        className={classes.inputContainer}
+        style={{
+          padding: '10px',
+          background: 'var(--mantine-color-dark-7)',
+          position: isMobile ? 'fixed' : 'sticky',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          paddingBottom: isMobile ? 'calc(env(safe-area-inset-bottom) + 10px)' : '10px',
+          width: '100%',
+          zIndex: 999,
+        }}
       >
         {ChatInput}
       </Paper>
@@ -306,7 +311,6 @@ export function Chat() {
   const inputRef = useRef<HTMLInputElement>(null);
   const streamingTimeoutRef = useRef<NodeJS.Timeout>();
   const isMobile = useMediaQuery('(max-width: 48em)');
-  const [isInputFocused, setIsInputFocused] = useState(false);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -332,20 +336,18 @@ export function Chat() {
   }, []);
 
   useEffect(() => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-
-    const handleOrientationChange = () => {
-      setTimeout(() => {
-        const vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
-      }, 100);
+    const setVH = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
     };
 
-    window.addEventListener('orientationchange', handleOrientationChange);
-    
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', setVH);
+
     return () => {
-      window.removeEventListener('orientationchange', handleOrientationChange);
+      window.removeEventListener('resize', setVH);
+      window.removeEventListener('orientationchange', setVH);
     };
   }, []);
 
@@ -455,24 +457,6 @@ export function Chat() {
     setUserInput(value);
   }, []);
 
-  const handleInputFocus = useCallback(() => {
-    setIsInputFocused(true);
-    setTimeout(() => {
-      if (scrollAreaRef.current) {
-        const viewport = scrollAreaRef.current.querySelector('.mantine-ScrollArea-viewport');
-        if (viewport) {
-          viewport.scrollTop = viewport.scrollHeight;
-        }
-      }
-    }, 200);
-  }, []);
-
-  const handleInputBlur = useCallback(() => {
-    setIsInputFocused(false);
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }, []);
-
   if (isMinimized) {
     return (
       <Group 
@@ -503,7 +487,6 @@ export function Chat() {
     onMinimize: () => setIsMinimized(true),
     onSendMessage: handleSendMessage,
     onInputChange: handleInputChange,
-    onInputBlur: handleInputBlur,
     setMessages,
     setIsLoading,
     setStreamingMessage,
@@ -522,17 +505,19 @@ export function Chat() {
             padding: 0,
           },
           content: {
-            minHeight: '100vh',
-            height: 'auto',
+            minHeight: '100%',
+            height: '100%',
             display: 'flex',
             flexDirection: 'column',
             background: 'var(--mantine-color-dark-7)',
+            paddingBottom: 'calc(env(safe-area-inset-bottom) + 60px)',
           },
           body: {
             flex: 1,
             padding: 0,
             display: 'flex',
             flexDirection: 'column',
+            height: '100%',
             position: 'relative',
             overflow: 'hidden',
           },
