@@ -332,8 +332,21 @@ export function Chat() {
   }, []);
 
   useEffect(() => {
-    const initialVh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${initialVh}px`);
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+
+    const handleOrientationChange = () => {
+      setTimeout(() => {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }, 100);
+    };
+
+    window.addEventListener('orientationchange', handleOrientationChange);
+    
+    return () => {
+      window.removeEventListener('orientationchange', handleOrientationChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -510,6 +523,7 @@ export function Chat() {
           },
           content: {
             minHeight: '100vh',
+            height: 'auto',
             display: 'flex',
             flexDirection: 'column',
             background: 'var(--mantine-color-dark-7)',
