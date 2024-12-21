@@ -60,12 +60,14 @@ const ChatContent = memo(({
   }, [onSendMessage]);
 
   const handleInputFocus = useCallback(() => {
-    if (scrollAreaRef.current) {
-      const viewport = scrollAreaRef.current.querySelector('.mantine-ScrollArea-viewport');
-      if (viewport) {
-        viewport.scrollTop = viewport.scrollHeight;
+    setTimeout(() => {
+      if (scrollAreaRef.current) {
+        const viewport = scrollAreaRef.current.querySelector('.mantine-ScrollArea-viewport');
+        if (viewport) {
+          viewport.scrollTop = viewport.scrollHeight;
+        }
       }
-    }
+    }, 200);
   }, []);
 
   const scrollToBottom = useCallback(() => {
@@ -336,18 +338,25 @@ export function Chat() {
   }, []);
 
   useEffect(() => {
-    const setVH = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    const handleViewportResize = () => {
+      if (window.visualViewport) {
+        const vh = window.visualViewport.height * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      } else {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
     };
 
-    setVH();
-    window.addEventListener('resize', setVH);
-    window.addEventListener('orientationchange', setVH);
+    window.visualViewport?.addEventListener('resize', handleViewportResize);
+    window.addEventListener('resize', handleViewportResize);
+    window.addEventListener('orientationchange', handleViewportResize);
+    handleViewportResize();
 
     return () => {
-      window.removeEventListener('resize', setVH);
-      window.removeEventListener('orientationchange', setVH);
+      window.visualViewport?.removeEventListener('resize', handleViewportResize);
+      window.removeEventListener('resize', handleViewportResize);
+      window.removeEventListener('orientationchange', handleViewportResize);
     };
   }, []);
 
@@ -505,12 +514,11 @@ export function Chat() {
             padding: 0,
           },
           content: {
-            minHeight: '100%',
-            height: '100%',
+            minHeight: 'calc(var(--vh, 1vh) * 100)',
+            height: 'calc(var(--vh, 1vh) * 100)',
             display: 'flex',
             flexDirection: 'column',
             background: 'var(--mantine-color-dark-7)',
-            paddingBottom: 'calc(env(safe-area-inset-bottom) + 60px)',
           },
           body: {
             flex: 1,
