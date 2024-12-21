@@ -68,6 +68,20 @@ const ChatContent = memo(({
     }
   }, []);
 
+  const scrollToBottom = useCallback(() => {
+    if (scrollAreaRef.current) {
+      const viewport = scrollAreaRef.current.querySelector('.mantine-ScrollArea-viewport');
+      if (viewport) {
+        viewport.scrollTop = viewport.scrollHeight;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(scrollToBottom, 50);
+    return () => clearTimeout(timer);
+  }, [messages, scrollToBottom]);
+
   const ChatInput = (
     <>
       <Modal
@@ -202,11 +216,20 @@ const ChatContent = memo(({
         style={{ 
           flex: 1, 
           overflow: 'auto',
-          marginBottom: isMobile ? 'calc(env(safe-area-inset-bottom) + 80px)' : 0
+          marginBottom: isMobile ? 'calc(env(safe-area-inset-bottom) + 80px)' : 0,
         }}
         ref={scrollAreaRef}
+        styles={{
+          viewport: {
+            display: 'flex',
+            flexDirection: 'column',
+          }
+        }}
       >
-        <Stack gap="xs" p={{ base: 'xs', sm: 'md' }}>
+        <Stack 
+          gap="xs" 
+          p={{ base: 'xs', sm: 'md' }}
+        >
           {messages.map((message, index) => (
             <Paper 
               key={index} 
@@ -303,7 +326,7 @@ export function Chat() {
           throw new Error('Failed to fetch messages');
         }
         const data = await response.json();
-        setMessages(prev => data ? [prev[0], ...data] : prev);
+        setMessages(prev => data ? [...data, prev[0]] : prev);
       } catch (error) {
         console.error('Error fetching messages:', error);
       }
