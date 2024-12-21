@@ -1,5 +1,7 @@
 FROM node:18-alpine AS base
 
+ENV NEXT_PUBLIC_API_BASE_URL=https://skyegill.com
+
 # Install dependencies only when needed
 FROM base AS deps
 RUN apk add --no-cache libc6-compat

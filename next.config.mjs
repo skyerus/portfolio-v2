@@ -13,5 +13,5 @@ export default withBundleAnalyzer({
   experimental: {
     optimizePackageImports: ['@mantine/core', '@mantine/hooks'],
   },
-  transpilePackages: ['next-mdx-remote'],
+  transpilePackages: ['@mantine/core', '@mantine/hooks', '@mantine/form', '@mantine/notifications','next-mdx-remote'],
 });
