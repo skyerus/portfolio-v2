@@ -6,6 +6,8 @@ import { ColorSchemeScript, mantineHtmlProps, MantineProvider } from '@mantine/c
 import { theme } from '../theme';
 import { Notifications } from '@mantine/notifications';
 
+const GA_TRACKING_ID = 'G-JHWRZSJYQ5';
+
 export const metadata = {
   title: 'Skye Gill | Software Engineer',
   description: 'London based software engineer specializing in web development, AI, and cloud technologies. View my projects, blog posts, and get in touch.',
@@ -54,6 +56,20 @@ export default function RootLayout({ children }: { children: any }) {
         />
         <meta name="theme-color" content="#1A1B1E" />
         <link rel="manifest" href="/manifest.json" />
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_TRACKING_ID}');
+            `,
+          }}
+        />
       </head>
       <body>
         <MantineProvider defaultColorScheme="dark" theme={theme}>
