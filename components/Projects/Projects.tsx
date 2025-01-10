@@ -4,19 +4,28 @@ import { Title, Text, Card, Button, Stack, Group, Container, Image, Box } from '
 import { IconExternalLink, IconCancel } from '@tabler/icons-react';
 import classes from './Projects.module.css';
 
-interface ProjectCardContentProps {
+interface Technology {
+  icon: string;
+  name: string;
+  className?: string;
+}
+
+interface Project {
   title: string;
   description: string;
-  technologies: Array<{
-    icon: string;
-    name: string;
-  }>;
+  technologies: Technology[];
   date: string;
   liveUrl?: string;
   isDiscontinued?: boolean;
+  media: {
+    type: 'image' | 'video';
+    src: string;
+    alt?: string;
+  };
 }
 
-function ProjectCardContent({ title, description, technologies, date, liveUrl, isDiscontinued }: ProjectCardContentProps) {
+// Move ProjectCardContent props to use the Project interface
+function ProjectCardContent(props: Project) {
   const openInNewTab = (e: React.MouseEvent, url: string) => {
     e.preventDefault();
     window.open(url);
@@ -25,23 +34,16 @@ function ProjectCardContent({ title, description, technologies, date, liveUrl, i
   return (
     <Stack id="projects" gap="sm">
       <Title order={3}>
-        {title}
+        {props.title}
         <Text size="xs" c="dimmed">
-          {date}
+          {props.date}
         </Text>
       </Title>
 
-      
-
       <Group gap="md">
-        {technologies.map((tech, index) => (
+        {props.technologies.map((tech, index) => (
           <Group key={index} gap={4}>
-            <Image
-              src={tech.icon}
-              h={20}
-              w={20}
-              alt={tech.name}
-            />
+            <Image src={tech.icon} h={20} w={20} alt={tech.name} className={tech.className} />
             <Text size="xs" fw={600} c="dimmed">
               {tech.name}
             </Text>
@@ -50,24 +52,20 @@ function ProjectCardContent({ title, description, technologies, date, liveUrl, i
       </Group>
 
       <Text size="sm" c="dimmed">
-        {description}
+        {props.description}
       </Text>
 
-      {isDiscontinued ? (
-        <Button
-          variant="outline"
-          leftSection={<IconCancel size={16} />}
-          disabled
-        >
+      {props.isDiscontinued ? (
+        <Button variant="outline" leftSection={<IconCancel size={16} />} disabled>
           DISCONTINUED
         </Button>
-      ) : liveUrl && (
+      ) : props.liveUrl && (
         <Button
           variant="outline"
           leftSection={<IconExternalLink size={16} />}
-          onClick={(e) => openInNewTab(e, liveUrl)}
+          onClick={(e) => openInNewTab(e, props.liveUrl!)}
           component="a"
-          href={liveUrl}
+          href={props.liveUrl}
         >
           LIVE
         </Button>
@@ -76,75 +74,97 @@ function ProjectCardContent({ title, description, technologies, date, liveUrl, i
   );
 }
 
-export function Projects() {
-  const riptidesContent = {
-    title: 'riptides.io',
-    date: '2019',
-    description: 'riptides is a chat service with a music queue (via Spotify) that each participant can add to. Created from a desire to listen/share music with friends.',
-    technologies: [
-      { icon: '/icons/go-original.svg', name: 'GOLANG' },
-      { icon: '/icons/vuejs-original.svg', name: 'VUEJS' },
-      { icon: '/icons/mysql-original.svg', name: 'MYSQL' },
-      { icon: '/icons/redis-original.svg', name: 'REDIS' },
-    ],
-    isDiscontinued: true
-  };
+function ProjectCard({ project }: { project: Project }) {
+  return (
+    <Card shadow="md" radius="md" className={classes.projectCard} p={0}>
+      <Box pos="relative">
+        {project.media.type === 'video' ? (
+          <video autoPlay loop muted className={classes.video}>
+            <source src={project.media.src} />
+          </video>
+        ) : (
+          <Image
+            src={project.media.src}
+            alt={project.media.alt || `${project.title} screenshot`}
+            className={classes.projectImage}
+          />
+        )}
+        <Card
+          shadow="md"
+          className={classes.infoCard}
+          display={{ base: 'none', md: 'block' }}
+          p="md"
+        >
+          <ProjectCardContent {...project} />
+        </Card>
+      </Box>
+      <Box p={{ base: 'md', md: 0 }} display={{ md: 'none' }}>
+        <ProjectCardContent {...project} />
+      </Box>
+    </Card>
+  );
+}
 
-  const dateguessContent = {
-    title: 'dateguess.skyegill.com',
-    date: '2020',
-    description: 'Inspired by geoguesser, this is a game of date guessing.',
-    technologies: [
-      { icon: '/icons/go-original.svg', name: 'GOLANG' },
-      { icon: '/icons/react-original.svg', name: 'REACT' },
-      { icon: '/icons/mysql-original.svg', name: 'MYSQL' },
-    ],
-    liveUrl: 'https://dateguess.skyegill.com'
-  };
+export function Projects() {
+  const projects: Project[] = [
+    {
+      title: 'websemble.com',
+      date: '2025',
+      description: 'A web agency.',
+      technologies: [
+        { 
+          icon: '/icons/nextjs-line.svg', 
+          name: 'NEXTJS',
+          className: classes.invertedIcon
+        },
+      ],
+      media: {
+        type: 'image',
+        src: '/websemble.png',
+        alt: 'websemble.com screenshot'
+      },
+      liveUrl: 'https://websemble.com'
+    },
+    {
+      title: 'dateguess.skyegill.com',
+      date: '2020',
+      description: 'Inspired by geoguesser, this is a game of date guessing.',
+      technologies: [
+        { icon: '/icons/go-original.svg', name: 'GOLANG' },
+        { icon: '/icons/react-original.svg', name: 'REACT' },
+        { icon: '/icons/mysql-original.svg', name: 'MYSQL' },
+      ],
+      isDiscontinued: true,
+      media: {
+        type: 'image',
+        src: '/dateguess.com.png',
+        alt: 'dateguess.com screenshot'
+      }
+    },
+    {
+      title: 'riptides.io',
+      date: '2019',
+      description: 'riptides is a chat service with a music queue (via Spotify) that each participant can add to. Created from a desire to listen/share music with friends.',
+      technologies: [
+        { icon: '/icons/go-original.svg', name: 'GOLANG' },
+        { icon: '/icons/vuejs-original.svg', name: 'VUEJS' },
+        { icon: '/icons/mysql-original.svg', name: 'MYSQL' },
+        { icon: '/icons/redis-original.svg', name: 'REDIS' },
+      ],
+      isDiscontinued: true,
+      media: {
+        type: 'video',
+        src: '/riptides.mp4'
+      }
+    }
+  ];
 
   return (
     <Container size="md" py="xl">
       <Stack gap="xl">
-        <Stack gap="xl">
-          <Card shadow="md" radius="md" className={classes.projectCard} p={0}>
-            <Box pos="relative">
-              <Image
-                src="/dateguess.com.png"
-                alt="dateguess.com screenshot"
-                className={classes.projectImage}
-              />
-              <Card 
-                shadow="md" 
-                className={classes.infoCard}
-                display={{ base: 'none', md: 'block' }}
-                p="md"
-              >
-                <ProjectCardContent {...dateguessContent} />
-              </Card>
-            </Box>
-            <Box p={{ base: 'md', md: 0 }} display={{ md: 'none' }}>
-              <ProjectCardContent {...dateguessContent} />
-            </Box>
-          </Card>
-          <Card shadow="md" radius="md" className={classes.projectCard} p={0}>
-            <Box pos="relative">
-              <video autoPlay loop muted className={classes.video}>
-                <source src="/riptides.mp4" />
-              </video>
-              <Card 
-                shadow="md" 
-                className={classes.infoCard}
-                display={{ base: 'none', md: 'block' }}
-                p="md"
-              >
-                <ProjectCardContent {...riptidesContent} />
-              </Card>
-            </Box>
-            <Box p={{ base: 'md', md: 0 }} display={{ md: 'none' }}>
-              <ProjectCardContent {...riptidesContent} />
-            </Box>
-          </Card>
-        </Stack>
+        {projects.map((project, index) => (
+          <ProjectCard key={index} project={project} />
+        ))}
       </Stack>
     </Container>
   );

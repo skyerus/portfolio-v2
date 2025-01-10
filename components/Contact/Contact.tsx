@@ -57,8 +57,8 @@ export function Contact() {
   };
 
   return (
-    <Container py="xl">
-      <Paper shadow="md" radius="lg" maw={{ base: '100%', md: '60%' }} p={{ base: 0, md: 'xl' }} className={classes.form}>
+    <Container>
+      <Paper shadow="md" radius="lg" maw={{ base: '100%', md: '100%' }} p={{ base: 0 }} className={classes.form}>
         <Stack gap="lg">
           <Title order={2} ta="center" c="gray.0">
             Get in Touch

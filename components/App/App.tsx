@@ -122,7 +122,6 @@ export function App({ children }: { children: React.ReactNode }) {
 
       <AppShell.Main>
           {children}
-          <Chat/>
       </AppShell.Main>
     </AppShell>
   );
