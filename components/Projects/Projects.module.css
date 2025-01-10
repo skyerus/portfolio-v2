@@ -27,6 +27,16 @@
   right: -50px;
   width: 350px;
   border-top: 4px solid var(--mantine-color-blue-filled);
+  background-color: var(--mantine-color-dark-7);
+  color: var(--mantine-color-white);
+}
+
+.projectText {
+  color: var(--mantine-color-white);
+}
+
+.dimmedText {
+  color: var(--mantine-color-gray-4);
 }
 
 .invertedIcon {

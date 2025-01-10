@@ -33,9 +33,9 @@ function ProjectCardContent(props: Project) {
 
   return (
     <Stack id="projects" gap="sm">
-      <Title order={3}>
+      <Title order={3} className={classes.projectText}>
         {props.title}
-        <Text size="xs" c="dimmed">
+        <Text size="xs" className={classes.dimmedText}>
           {props.date}
         </Text>
       </Title>
@@ -44,14 +44,14 @@ function ProjectCardContent(props: Project) {
         {props.technologies.map((tech, index) => (
           <Group key={index} gap={4}>
             <Image src={tech.icon} h={20} w={20} alt={tech.name} className={tech.className} />
-            <Text size="xs" fw={600} c="dimmed">
+            <Text size="xs" fw={600} className={classes.dimmedText}>
               {tech.name}
             </Text>
           </Group>
         ))}
       </Group>
 
-      <Text size="sm" c="dimmed">
+      <Text size="sm" className={classes.dimmedText}>
         {props.description}
       </Text>
 
