@@ -25,36 +25,38 @@ export function Contact() {
     },
   });
 
-  const handleSubmit = async (values: ContactFormValues) => {
+  const handleSubmit = form.onSubmit(async (values) => {
+    const formData = new FormData();
+    formData.append('form-name', 'contact');
+    Object.entries(values).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080';
-      const response = await fetch(`${baseUrl}/api/v1/contact`, {
+      const response = await fetch('/_forms.html', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString(),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send message');
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+      
+      form.reset();
       notifications.show({
         title: 'Success',
         message: 'Message sent successfully',
         color: 'green',
       });
-
-      form.reset();
     } catch (error) {
       notifications.show({
         title: 'Error',
-        message: error instanceof Error ? error.message : 'Failed to send message',
+        message: 'Failed to send message. Please try again later.',
         color: 'red',
       });
     }
-  };
+  });
 
   return (
     <Container>
@@ -64,24 +66,31 @@ export function Contact() {
             Get in Touch
           </Title>
 
-          <form onSubmit={form.onSubmit(handleSubmit)}>
+          <form onSubmit={handleSubmit} name="contact" method="POST">
+            <input type="hidden" name="form-name" value="contact" />
             <Stack gap="md">
               <TextInput
                 label="Name"
+                name="name"
                 placeholder="Your name"
+                required
                 {...form.getInputProps('name')}
               />
 
               <TextInput
                 label="Email"
+                name="email"
                 placeholder="your@email.com"
+                required
                 {...form.getInputProps('email')}
               />
 
               <Textarea
                 label="Message"
+                name="message"
                 placeholder="How can I help you?"
                 minRows={4}
+                required
                 {...form.getInputProps('message')}
               />
 
