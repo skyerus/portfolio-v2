@@ -11,10 +11,10 @@ concurrency:
 
 jobs:
   test_pull_request:
-    runs-on: ubuntu-latest
+    runs-on: ${{ fromJSON(((github.actor != 'skyerus' && github.actor != 'github-actions[bot]') || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository)) && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64","macbook-linux"]') }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version-file: '.nvmrc'
           cache: 'yarn'
